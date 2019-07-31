@@ -1,0 +1,77 @@
+Admin_log = "admin"
+Admin_password = "admin"
+pizza = {}
+drinks = {}
+MENU = [pizza, drinks]
+
+
+def Admin(login, password):
+    return login == Admin_log and password == Admin_password
+
+
+def entrance():
+    login = input("Your login: ")
+    password = input("Enter your password: ")
+    return {'Login': login, 'Password': password}
+
+
+def Menu():       
+    print('Menu')
+    f = open('pizza.txt')
+    data = f.readlines()
+    print(data)
+    f.close()
+    f = open('drink.txt')
+    data = f.readlines()
+    print(data)
+    f.close()
+
+def If_Admin():
+    Menu()
+    while True:
+        more_dishes = input('Anything else? pizza/drinks/ no thanks')
+        new_name = more_dishes
+        if more_dishes == 'pizza':
+            add_dish(pizza, new_name)
+        elif more_dishes == 'drinks':
+            add_dish(drinks, new_name)        
+        elif more_dishes == 'no thanks':
+            break
+        else:            
+            sys.exit("Fatal error!")
+
+def add_dish(new_dish, new_name):
+    dish = input("dish: ")
+    cost = input("cost: ")
+    new_dish[dish] = int(cost)
+    f = open(new_name + '.txt', 'a')
+    f.write('\n'+dish +' - '+ cost)
+    f.close()
+
+def If_User():    
+    Menu()
+    sum=0
+    while True:	
+        order = input('What would you like to order?  ')
+        if order in pizza: sum += pizza[order]
+        if order in drinks: sum += drinks[order]        
+        order = input('Anything else? \n yes/no\n ')
+        if order == 'yes':
+            continue
+        elif order == 'no':
+            break
+        else:
+            print('Error :( Try again')
+	    
+	    import sys
+	    sys.exit()
+    print('Order price: %d' % sum) 
+    return sum
+
+
+if __name__ == "__main__":
+    User_data = entrance()
+    if Admin(User_data['login'], User_data['password']):
+        If_Admin()
+    else:
+        If_User()
